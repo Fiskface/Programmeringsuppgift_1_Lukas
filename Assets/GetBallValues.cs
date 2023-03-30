@@ -3,18 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteAlways]
-public class GetPlaneValues : MonoBehaviour
+public class GetBallValues : MonoBehaviour
 {
-
-    // Update is called once per frame
     void Update()
     {
         SceneManager sceneManager = GameObject.FindWithTag("SceneManager").GetComponent<SceneManager>();
-        transform.lo
+        transform.position = sceneManager.ballPosition;
         
-        if (sceneManager.updatedNormal)
-        {
-            
-        }
     }
 }
