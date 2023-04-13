@@ -6,7 +6,7 @@ using UnityEngine;
 public class GetPlaneValues : MonoBehaviour
 {
 
-    // Update is called once per frame
+    // Sets orientation of plane
     void Update()
     {
         SceneManager sceneManager = GetComponentInParent<SceneManager>();

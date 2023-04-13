@@ -5,7 +5,9 @@ using UnityEngine;
 [ExecuteAlways]
 public class GetBallValues : MonoBehaviour
 {
+    
     private float diameter;
+    //Sets all ball values
     void Update()
     {
         SceneManager sceneManager = GameObject.FindWithTag("SceneManager").GetComponent<SceneManager>();

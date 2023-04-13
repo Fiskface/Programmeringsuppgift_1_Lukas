@@ -8,14 +8,15 @@ using Vectors;
 [ExecuteAlways]
 [RequireComponent(typeof(VectorRenderer))]
 public class Example : MonoBehaviour {
-    
+    //Optional: Gör så saker bara händer om bollens riktning är samma som bVectors riktning.
     [NonSerialized] 
     private VectorRenderer vectors;
     
-    //Math
+    //Vectors
     private Vector3 aVector;
     private Vector3 bVector;
 
+    //Positions
     private Vector3 bouncePosition;
     private Vector3 resultPosition;
 
@@ -32,6 +33,7 @@ public class Example : MonoBehaviour {
         
         ballDiameter = sM.ballRadius * 2; 
         
+        //Calculates necessary vectors
         aVector = -sM.normalNormalized * sM.planeDistance;
 
         if (sM.planeDistance == 0)
@@ -43,12 +45,14 @@ public class Example : MonoBehaviour {
             bVector = sM.ballDirection.normalized * (sM.planeDistance * sM.planeDistance) /
                       (Vector3.Dot(aVector ,sM.ballDirection.normalized));
         }
+        
+        //Calculates all ball positions
         bouncePosition = sM.ballPosition + bVector;
         resultPosition = bouncePosition - aVector - aVector + bVector;
 
         ballDiameter = sM.ballRadius * 2;
         
-        
+        //Makes the balls that shows where it will bounce and the result be right size and position
         foreach (var balltr in GetComponentsInChildren<Transform>())
         {
             if (balltr.name.ToLower().Contains("bounce"))
@@ -63,11 +67,7 @@ public class Example : MonoBehaviour {
             }
         }
 
-        
-        //TODO: Fixa så de resterande 3 vectorerna ritas ut
-        //Optional: Gör så saker bara händer om bollens riktning är samma som bVectors riktning.
-        
-        
+        //Draws vectors
         using (vectors.Begin()) {
             //Balldirection normalized
             vectors.Draw(sM.ballPosition, sM.ballPosition + sM.ballDirection.normalized, Color.green);
@@ -79,32 +79,14 @@ public class Example : MonoBehaviour {
             //From bounceposition to resultposition
             vectors.Draw(bouncePosition, resultPosition, Color.cyan);
             
+            //Showing Step vectors
+            vectors.Draw(bouncePosition, bouncePosition-aVector, Color.magenta);
+            vectors.Draw(bouncePosition-aVector, bouncePosition-aVector-aVector, Color.magenta);
+            vectors.Draw(bouncePosition-aVector-aVector, bouncePosition-aVector-aVector+bVector, Color.magenta);
+            
             //Plane Normal
             Transform planetr = GameObject.Find("Plane").transform;
             vectors.Draw(planetr.position, planetr.position + planetr.up, Color.yellow);
         }
     }
 }
-
-/*
-[CustomEditor(typeof(Example))]
-public class ExampleGUI : Editor {
-    void OnSceneGUI() {
-        var ex = target as Example;
-        if (ex == null) return;
-
-        EditorGUI.BeginChangeCheck();
-        var a = Handles.PositionHandle(ex.vectorA, Quaternion.identity);
-        var b = Handles.PositionHandle(ex.vectorB, Quaternion.identity);
-        var c = Handles.PositionHandle(ex.vectorC, Quaternion.identity);
-
-        if (EditorGUI.EndChangeCheck()) {
-            Undo.RecordObject(target, "Vector Positions");
-            ex.vectorA = a;
-            ex.vectorB = b;
-            ex.vectorC = c;
-            EditorUtility.SetDirty(target);
-        }
-    }
-}
-*/
