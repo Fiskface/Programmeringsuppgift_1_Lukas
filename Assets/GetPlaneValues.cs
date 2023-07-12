@@ -11,6 +11,10 @@ public class GetPlaneValues : MonoBehaviour
     {
         SceneManager sceneManager = GetComponentInParent<SceneManager>();
         transform.up = sceneManager.normalNormalized;
-        transform.position = sceneManager.ballPosition - (sceneManager.ballRadius + sceneManager.planeDistance) * sceneManager.normalNormalized;
+
+        transform.position = sceneManager.normalNormalized * sceneManager.planeDistance;
+
+        //tidigare lösning
+        //transform.position = sceneManager.ballPosition - (sceneManager.ballRadius + sceneManager.planeDistance) * sceneManager.normalNormalized;
     }
 }

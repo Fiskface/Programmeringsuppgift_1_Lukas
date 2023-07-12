@@ -21,6 +21,7 @@ public class Example : MonoBehaviour {
     private Vector3 resultPosition;
 
     private float ballDiameter;
+    private float aVectorLength;
 
     void OnEnable() {
         vectors = GetComponent<VectorRenderer>();
@@ -30,27 +31,18 @@ public class Example : MonoBehaviour {
     {
         SceneManager sM = GetComponentInParent<SceneManager>();
         
-        
         ballDiameter = sM.ballRadius * 2; 
         
-        //Calculates necessary vectors
-        aVector = -sM.normalNormalized * sM.planeDistance;
-
-        if (sM.planeDistance == 0)
-        {
-            bVector = Vector3.zero;
-        }
-        else
-        {
-            bVector = sM.ballDirection.normalized * (sM.planeDistance * sM.planeDistance) /
-                      (Vector3.Dot(aVector ,sM.ballDirection.normalized));
-        }
+        aVectorLength = Math.DotProduct(sM.ballPosition, sM.normalNormalized) - sM.planeDistance - sM.ballRadius;
+        aVector = -sM.normalNormalized * aVectorLength;
         
-        //Calculates all ball positions
+        bVector = Math.Normalize(sM.ballDirection) * (aVectorLength * aVectorLength) /
+                  (Math.DotProduct(aVector ,Math.Normalize(sM.ballDirection)));
+
+            //Calculates all ball positions
         bouncePosition = sM.ballPosition + bVector;
         resultPosition = bouncePosition - aVector - aVector + bVector;
-
-        ballDiameter = sM.ballRadius * 2;
+        
         
         //Makes the balls that shows where it will bounce and the result be right size and position
         foreach (var balltr in GetComponentsInChildren<Transform>())
@@ -66,11 +58,13 @@ public class Example : MonoBehaviour {
                 balltr.localScale = new Vector3(ballDiameter, ballDiameter, ballDiameter);
             }
         }
+        
+        Debug.Log(aVector);
 
         //Draws vectors
         using (vectors.Begin()) {
             //Balldirection normalized
-            vectors.Draw(sM.ballPosition, sM.ballPosition + sM.ballDirection.normalized, Color.green);
+            vectors.Draw(sM.ballPosition, sM.ballPosition + Math.Normalize(sM.ballDirection), Color.green);
             
             //Vector to plane
             vectors.Draw(sM.ballPosition, sM.ballPosition + aVector, Color.red);
