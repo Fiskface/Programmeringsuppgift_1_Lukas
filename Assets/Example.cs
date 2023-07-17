@@ -59,7 +59,6 @@ public class Example : MonoBehaviour {
             }
         }
         
-        Debug.Log(aVector);
 
         //Draws vectors
         using (vectors.Begin()) {
@@ -76,7 +75,7 @@ public class Example : MonoBehaviour {
             //Showing Step vectors
             vectors.Draw(bouncePosition, bouncePosition-aVector, Color.magenta);
             vectors.Draw(bouncePosition-aVector, bouncePosition-aVector-aVector, Color.magenta);
-            vectors.Draw(bouncePosition-aVector-aVector, bouncePosition-aVector-aVector+bVector, Color.magenta);
+            vectors.Draw(bouncePosition-aVector-aVector, resultPosition, Color.magenta);
             
             //Plane Normal
             Transform planetr = GameObject.Find("Plane").transform;
