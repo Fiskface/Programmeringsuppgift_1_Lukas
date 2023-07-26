@@ -34,11 +34,20 @@ public class Example : MonoBehaviour {
         ballDiameter = sM.ballRadius * 2; 
         
         aVectorLength = Math.DotProduct(sM.ballPosition, sM.normalNormalized) - sM.planeDistance - sM.ballRadius;
+        
         aVector = -sM.normalNormalized * aVectorLength;
         
-        bVector = Math.Normalize(sM.ballDirection) * (aVectorLength * aVectorLength) /
-                  (Math.DotProduct(aVector ,Math.Normalize(sM.ballDirection)));
-
+        if (aVectorLength == 0)
+        {
+            bVector = Vector3.zero;
+        }
+        else
+        {
+            bVector = Math.Normalize(sM.ballDirection) * (aVectorLength * aVectorLength) /
+                              (Math.DotProduct(aVector ,Math.Normalize(sM.ballDirection)));
+        }
+        
+        
             //Calculates all ball positions
         bouncePosition = sM.ballPosition + bVector;
         resultPosition = bouncePosition - aVector - aVector + bVector;
@@ -68,7 +77,7 @@ public class Example : MonoBehaviour {
             //Vector to plane
             vectors.Draw(sM.ballPosition, sM.ballPosition + aVector, Color.red);
             //Vector to bounceposition
-            vectors.Draw(sM.ballPosition, bouncePosition, Color.cyan);
+            vectors.Draw(sM.ballPosition, bouncePosition, Color.blue);
             //From bounceposition to resultposition
             vectors.Draw(bouncePosition, resultPosition, Color.cyan);
             
